@@ -6,7 +6,7 @@ export const AuthRoutes = () => {
     <Routes>
       {/* Rutas */}
       <Route path="login" element={<LoginPage />} />
-      <Route path="login" element={<RegisterPage />} />
+      <Route path="register" element={<RegisterPage />} />
 
       {/* Ruta Default (User no Autentificado) */}
       <Route path="/*" element={<Navigate to={"/auth/login"} />} />
