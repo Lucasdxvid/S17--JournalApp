@@ -1,7 +1,7 @@
-import { Box } from "@mui/material";
-import { NavBar } from "../components/NavBar";
+import { Box, Toolbar } from "@mui/material";
+import { NavBar, SideBar } from "../components/";
 //! Creamos constante para darle un tamaño especifico a nuestro menu (navbar)
-const drawerWidth = 240;
+const drawerWidth = 280;
 
 export const JournalLayout = ({ children }) => {
   //! Layout para el JournalPage
@@ -9,12 +9,12 @@ export const JournalLayout = ({ children }) => {
     <Box sx={{ display: "flex" }}>
       {/* Navbar drawerWidth*/}
       <NavBar drawerWidth={drawerWidth} />
-
+      <SideBar drawerWidth={drawerWidth} />
       {/* Sidebar drawerWidth*/}
       <Box component={"main"} sx={{ flexGrow: 1, p: 3 }}>
         {children}
       </Box>
-      {/* Toolbar */}
+      <Toolbar />
     </Box>
   );
 };
