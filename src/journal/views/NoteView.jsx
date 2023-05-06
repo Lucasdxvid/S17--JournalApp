@@ -46,7 +46,7 @@ export const NoteView = () => {
         />
 
         {/* Galería de Imagenes */}
-        <Grid item margin={2} width={"50    %"}>
+        <Grid item margin={2} width={"50%"}>
           <ImageGallery />
         </Grid>
       </Grid>
