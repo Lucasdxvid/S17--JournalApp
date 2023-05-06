@@ -1,5 +1,6 @@
 import { Box } from "@mui/material";
-//! Creamos constante para darle un tamaño especifico a nuestro menu lateral
+import { NavBar } from "../components/NavBar";
+//! Creamos constante para darle un tamaño especifico a nuestro menu (navbar)
 const drawerWidth = 240;
 
 export const JournalLayout = ({ children }) => {
@@ -7,6 +8,8 @@ export const JournalLayout = ({ children }) => {
   return (
     <Box sx={{ display: "flex" }}>
       {/* Navbar drawerWidth*/}
+      <NavBar drawerWidth={drawerWidth} />
+
       {/* Sidebar drawerWidth*/}
       <Box component={"main"} sx={{ flexGrow: 1, p: 3 }}>
         {children}
