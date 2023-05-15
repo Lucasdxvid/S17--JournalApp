@@ -14,7 +14,7 @@ import { useForm } from "../../hooks";
 import { checkingAuthentification, startGoogleSignIn } from "../../store/auth";
 
 export const LoginPage = () => {
-  const dispatch = useDispatch(); //? Nos permite traer nuestro thunk
+  const dispatch = useDispatch(); //? Nos permite traer nuestros thunks
 
   const { email, password, onInputChange } = useForm({
     email: "xxx@gmail.com",
@@ -24,12 +24,12 @@ export const LoginPage = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     console.log({ email, password });
-    dispatch(checkingAuthentification());
+    dispatch(checkingAuthentification()); //? Llamamos a la accion que cambia el estado a "CHECKING"
   };
 
   const onGoogleSignIn = () => {
     console.log("Sign with Google");
-    dispatch(startGoogleSignIn());
+    dispatch(startGoogleSignIn()); //? Llamamos a la accion que cambia el estado a "CHECKING"
   };
 
   return (
