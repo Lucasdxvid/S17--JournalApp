@@ -1,3 +1,4 @@
+import { useDispatch } from "react-redux";
 import { Link as RouterLink } from "react-router-dom"; //! Le damos un ALIAS al Link de RouterDom para que no haga conflicto con el de MUI
 import { Google } from "@mui/icons-material";
 import {
@@ -9,11 +10,31 @@ import {
   Link,
 } from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
+import { useForm } from "../../hooks";
+import { checkingAuthentification, startGoogleSignIn } from "../../store/auth";
 
 export const LoginPage = () => {
+  const dispatch = useDispatch(); //? Nos permite traer nuestro thunk
+
+  const { email, password, onInputChange } = useForm({
+    email: "xxx@gmail.com",
+    password: "123456",
+  });
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    console.log({ email, password });
+    dispatch(checkingAuthentification());
+  };
+
+  const onGoogleSignIn = () => {
+    console.log("Sign with Google");
+    dispatch(startGoogleSignIn());
+  };
+
   return (
     <AuthLayout title="Login">
-      <FormControl>
+      <FormControl component="form" onSubmit={onSubmit}>
         <Grid container>
           <Grid item xs={12} sx={{ mt: 1 }}>
             <TextField
@@ -22,6 +43,9 @@ export const LoginPage = () => {
               placeholder="athl12311@gmail.com"
               fullWidth
               margin="normal"
+              name="email"
+              value={email}
+              onChange={onInputChange}
             />
           </Grid>
           <Grid item xs={12} sx={{ mt: 1 }}>
@@ -30,18 +54,21 @@ export const LoginPage = () => {
               type="password"
               placeholder="**********"
               fullWidth
+              name="password"
+              value={password}
+              onChange={onInputChange}
             />
           </Grid>
           {/* Spacing es para el espacio de sus hijos, container que tiene hijos dentro - Item que es un hijo del grid */}
           {/* xs es pequeño sm pantallas pequeña-mediana, md, xl y asi sucesivamente, el number que otorgamos es el numero de columnas que ocupa */}
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
             <Grid item xs={12} sm={6}>
-              <Button variant="contained" fullWidth>
+              <Button type="submit" variant="contained" fullWidth>
                 Login
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Button variant="contained" fullWidth>
+              <Button variant="contained" fullWidth onClick={onGoogleSignIn}>
                 <Google />
                 <Typography variant="bold" sx={{ ml: 1 }}>
                   Google

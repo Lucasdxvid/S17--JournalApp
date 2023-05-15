@@ -15,7 +15,9 @@ export const authSlice = createSlice({
     login: (state, action) => {},
     logout: (state, payload) => {},
     //? Cuando la APP este en proceso asincrono de autentificacion, la misma estara en estado de "loading" para bloquear botones, etc. Hasta que cargue
-    checkingCredentials: (state) => {},
+    checkingCredentials: (state) => {
+      state.status = "checking";
+    },
   },
 });
 
