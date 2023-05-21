@@ -12,8 +12,23 @@ export const authSlice = createSlice({
     errorMessage: null,
   },
   reducers: {
-    login: (state, action) => {},
-    logout: (state, payload) => {},
+    // action -> {} = action.payload
+    login: (state, { payload }) => {
+      state.status = "authenticated"; // El estado es asi cuando se autentifica
+      state.uid = payload.uid;
+      state.email = payload.email;
+      state.displayName = payload.displayName;
+      state.photoURL = payload.photoURL;
+      state.errorMessage = null; // Es null porque no hay error
+    },
+    logout: (state, { payload }) => {
+      state.status = "not-authenticated"; // El estado es asi cuando no se autentifica
+      state.uid = null;
+      state.email = null;
+      state.displayName = null;
+      state.photoURL = null;
+      state.errorMessage = payload.errorMessage; // Es el error de autenticacion de nuestro TRY CATCH en el PROVIDER js / thunks
+    },
     //? Cuando la APP este en proceso asincrono de autentificacion, la misma estara en estado de "loading" para bloquear botones, etc. Hasta que cargue
     checkingCredentials: (state) => {
       state.status = "checking";

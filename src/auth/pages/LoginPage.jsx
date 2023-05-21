@@ -1,4 +1,5 @@
-import { useDispatch } from "react-redux";
+import { useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link as RouterLink } from "react-router-dom"; //! Le damos un ALIAS al Link de RouterDom para que no haga conflicto con el de MUI
 import { Google } from "@mui/icons-material";
 import {
@@ -14,6 +15,10 @@ import { useForm } from "../../hooks";
 import { checkingAuthentification, startGoogleSignIn } from "../../store/auth";
 
 export const LoginPage = () => {
+  const { status } = useSelector((state) => state.auth); //* 1er argumento (state - nuestro objeto auth (slice)) / Sirve para seleccionar o tomar alguna pieza del state, leer algo del STORE
+
+  const isAuthenticating = useMemo(() => status === "checking", [status]); // Basicamente memorizamos el status cuando tenga el valor "CHECKING" que es cuando hacemos el dispatch de checkear
+
   const dispatch = useDispatch(); //? Nos permite traer nuestros thunks
 
   const { email, password, onInputChange } = useForm({
@@ -63,12 +68,22 @@ export const LoginPage = () => {
           {/* xs es pequeño sm pantallas pequeña-mediana, md, xl y asi sucesivamente, el number que otorgamos es el numero de columnas que ocupa */}
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
             <Grid item xs={12} sm={6}>
-              <Button type="submit" variant="contained" fullWidth>
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isAuthenticating} //? Se deshabilita si esta en "checking"
+              >
                 Login
               </Button>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Button variant="contained" fullWidth onClick={onGoogleSignIn}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={onGoogleSignIn}
+                disabled={isAuthenticating}
+              >
                 <Google />
                 <Typography variant="bold" sx={{ ml: 1 }}>
                   Google
