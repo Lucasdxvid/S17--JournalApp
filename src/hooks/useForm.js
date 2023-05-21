@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-export const useForm = (initialForm = {}) => {
+//! Agregamos el formValidations
+export const useForm = (initialForm = {}, formValidations = {}) => {
   const [formState, setFormState] = useState(initialForm);
 
   const onInputChange = ({ target }) => {

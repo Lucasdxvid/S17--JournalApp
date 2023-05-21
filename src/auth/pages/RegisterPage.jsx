@@ -15,10 +15,28 @@ const formData = {
   password: "123456",
   displayName: "Dual Athloner",
 };
-export const RegisterPage = () => {
-  const { displayName, email, password, onInputChange, formState } =
-    useForm(formData); // es lo mismo
 
+const formValidations = {
+  //* Tenemos 2 argumentos: funcion que valida - Mensaje error a mostrar
+  email: [(value) => value.includes("@"), "El correo necesita un @"],
+  password: [
+    (value) => value.length <= 6,
+    "La contraseña tiene que tener por lo menos 6 letras",
+  ],
+  displayName: [(value) => value.length >= 1, "El nombre es obligatorio"],
+};
+export const RegisterPage = () => {
+  const {
+    displayName,
+    email,
+    password,
+    onInputChange,
+    formState,
+    isFormValid,
+    displayNameValid,
+    emailValid,
+    passwordValid,
+  } = useForm(formData, formValidations); // El formValidations lo pasamos como segundo argumento
   const onSubmit = (event) => {
     event.preventDefault();
     console.log(formState);
@@ -39,6 +57,8 @@ export const RegisterPage = () => {
                 name="displayName"
                 value={displayName}
                 onChange={onInputChange}
+                error={!displayNameValid}
+                helperText={displayNameValid}
               />
             </Grid>
 
