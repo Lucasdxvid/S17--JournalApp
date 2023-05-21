@@ -13,7 +13,7 @@ export const startGoogleSignIn = () => {
   return async (dispatch) => {
     dispatch(checkingCredentials());
 
-    const result = signInWithGoogle();
+    const result = await signInWithGoogle(); //Si no ponemos await al consologear no espera a que la promesa termine
     console.log({ result }); // Es lo mismo si lo consologeamos o no en {}
   };
 };
