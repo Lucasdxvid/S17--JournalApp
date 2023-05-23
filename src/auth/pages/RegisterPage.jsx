@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom"; //! Le damos un ALIAS al Link de RouterDom para que no haga conflicto con el de MUI
 import {
   Grid,
@@ -11,21 +12,24 @@ import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
 
 const formData = {
-  email: "athl12311@gmail.com",
-  password: "123456",
-  displayName: "Dual Athloner",
+  email: "",
+  password: "",
+  displayName: "",
 };
 
 const formValidations = {
   //* Tenemos 2 argumentos: funcion que valida - Mensaje error a mostrar
   email: [(value) => value.includes("@"), "El correo necesita un @"],
   password: [
-    (value) => value.length <= 6,
+    (value) => value.length >= 6,
     "La contraseña tiene que tener por lo menos 6 letras",
   ],
   displayName: [(value) => value.length >= 1, "El nombre es obligatorio"],
 };
+
 export const RegisterPage = () => {
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
   const {
     displayName,
     email,
@@ -39,11 +43,15 @@ export const RegisterPage = () => {
   } = useForm(formData, formValidations); // El formValidations lo pasamos como segundo argumento
   const onSubmit = (event) => {
     event.preventDefault();
+    setFormSubmitted(true);
     console.log(formState);
   };
 
+  console.log(displayNameValid);
+
   return (
     <AuthLayout title="Registro">
+      <h1>FormValid{isFormValid ? "Válido" : "Incorrecto"}</h1>
       <FormControl component="form" onSubmit={onSubmit}>
         <Grid container>
           <Grid item xs={12} sx={{ mt: 1 }}>
@@ -57,7 +65,7 @@ export const RegisterPage = () => {
                 name="displayName"
                 value={displayName}
                 onChange={onInputChange}
-                error={!displayNameValid}
+                error={!!displayNameValid && formSubmitted} // Doble negacion lo convierte en booleano && y si el formSubmitted se disparo
                 helperText={displayNameValid}
               />
             </Grid>
@@ -71,6 +79,8 @@ export const RegisterPage = () => {
               name="email"
               value={email}
               onChange={onInputChange}
+              error={!!emailValid && formSubmitted} // Doble negacion lo convierte en booleano && y si el formSubmitted se disparo
+              helperText={emailValid}
             />
           </Grid>
 
@@ -83,6 +93,8 @@ export const RegisterPage = () => {
               name="password"
               value={password}
               onChange={onInputChange}
+              error={!!passwordValid && formSubmitted} // Doble negacion lo convierte en booleano && y si el formSubmitted se disparo
+              helperText={passwordValid}
             />
           </Grid>
 
