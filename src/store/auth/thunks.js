@@ -1,4 +1,7 @@
-import { signInWithGoogle } from "../../firebase/providers";
+import {
+  signInWithGoogle,
+  registerUserWithEmailPassword,
+} from "../../firebase/providers";
 import { checkingCredentials, login, logout } from "./";
 
 //? Thunks - acciones que podemos despachar pero que internamente tienen una tarea asíncrona / si fuera síncrona lo haríamos con los reducers
@@ -20,5 +23,23 @@ export const startGoogleSignIn = () => {
     //* Si sale bien devolvemos la accion login la cual coloca el estado en "authenticated" y credenciales en
     dispatch(login(result)); //! El PAYLOAD es el result
     console.log({ result }); // Es lo mismo si lo consologeamos o no en {}
+  };
+};
+
+export const startCreatingUserWithEmailPassword = ({
+  email,
+  password,
+  displayName,
+}) => {
+  return async (dispatch) => {
+    dispatch(checkingCredentials());
+
+    const resp = await registerUserWithEmailPassword({
+      email,
+      password,
+      displayName,
+    });
+
+    console.log(resp);
   };
 };

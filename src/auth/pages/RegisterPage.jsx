@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
+import { useDispatch } from "react-redux";
+import { startCreatingUserWithEmailPassword } from "../../store/auth";
 
 const formData = {
   email: "",
@@ -28,6 +30,8 @@ const formValidations = {
 };
 
 export const RegisterPage = () => {
+  const dispatch = useDispatch();
+
   const [formSubmitted, setFormSubmitted] = useState(false);
 
   const {
@@ -44,10 +48,9 @@ export const RegisterPage = () => {
   const onSubmit = (event) => {
     event.preventDefault();
     setFormSubmitted(true);
-    console.log(formState);
+    if (!isFormValid) return; // si no es valido que pare ahi
+    dispatch(startCreatingUserWithEmailPassword(formState));
   };
-
-  console.log(displayNameValid);
 
   return (
     <AuthLayout title="Registro">
