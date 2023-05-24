@@ -9,13 +9,17 @@ import {
   FormControl,
   Button,
   Link,
+  Alert,
 } from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
-import { checkingAuthentification, startGoogleSignIn } from "../../store/auth";
+import {
+  startGoogleSignIn,
+  startLoginWithEmailPassword,
+} from "../../store/auth";
 
 export const LoginPage = () => {
-  const { status } = useSelector((state) => state.auth); //* 1er argumento (state - nuestro objeto auth (slice)) / Sirve para seleccionar o tomar alguna pieza del state, leer algo del STORE
+  const { status, errorMessage } = useSelector((state) => state.auth); //* 1er argumento (state - nuestro objeto auth (slice)) / Sirve para seleccionar o tomar alguna pieza del state, leer algo del STORE
 
   const isAuthenticating = useMemo(() => status === "checking", [status]); // Basicamente memorizamos el status cuando tenga el valor "CHECKING" que es cuando hacemos el dispatch de checkear
 
@@ -28,8 +32,8 @@ export const LoginPage = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    console.log({ email, password });
-    dispatch(checkingAuthentification()); //? Llamamos a la accion que cambia el estado a "CHECKING"
+    // console.log({ email, password });
+    dispatch(startLoginWithEmailPassword({ email, password })); //? Llamamos a la accion que cambia el estado a "CHECKING"
   };
 
   const onGoogleSignIn = () => {
@@ -64,6 +68,13 @@ export const LoginPage = () => {
               onChange={onInputChange}
             />
           </Grid>
+
+          <Grid container display={!!errorMessage ? "" : "none"} sx={{ mt: 1 }}>
+            <Grid item xs={12}>
+              <Alert severity="error"> {errorMessage}</Alert>
+            </Grid>
+          </Grid>
+
           {/* Spacing es para el espacio de sus hijos, container que tiene hijos dentro - Item que es un hijo del grid */}
           {/* xs es pequeño sm pantallas pequeña-mediana, md, xl y asi sucesivamente, el number que otorgamos es el numero de columnas que ocupa */}
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
