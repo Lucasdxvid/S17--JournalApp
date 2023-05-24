@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link as RouterLink } from "react-router-dom"; //! Le damos un ALIAS al Link de RouterDom para que no haga conflicto con el de MUI
 import {
   Grid,
@@ -7,10 +7,11 @@ import {
   FormControl,
   Button,
   Link,
+  Alert,
 } from "@mui/material";
 import { AuthLayout } from "../layout/AuthLayout";
 import { useForm } from "../../hooks";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { startCreatingUserWithEmailPassword } from "../../store/auth";
 
 const formData = {
@@ -33,6 +34,11 @@ export const RegisterPage = () => {
   const dispatch = useDispatch();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const { status, errorMessage } = useSelector((state) => state.auth); //* 1er argumento (state - nuestro objeto auth (slice)) / Sirve para seleccionar o tomar alguna pieza del state, leer algo del STORE
+  const isCheckingAuthentication = useMemo(
+    () => status === "checking",
+    [status]
+  ); //Memorizamos el estado checking y su dependencia es cuando cambia el estado ese
 
   const {
     displayName,
@@ -102,8 +108,16 @@ export const RegisterPage = () => {
           </Grid>
 
           <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+            <Grid item xs={12} display={!!errorMessage ? "" : "none"}>
+              <Alert severity="error">{errorMessage}</Alert>
+            </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" fullWidth type="submit">
+              <Button
+                variant="contained" //Arriba tenemos un errorMessage que sera "display" cuando el errorMessage sea NULL
+                fullWidth
+                type="submit"
+                disabled={isCheckingAuthentication}
+              >
                 Crear Cuenta
               </Button>
             </Grid>

@@ -62,7 +62,7 @@ export const registerUserWithEmailPassword = async ({
     };
   } catch (error) {
     console.log(error);
-    return { ok: false, errorMessage: error.message };
+    return { ok: false, errorMessage: error.message }; // Si a error.message lo cambiamos por "hola mundo" cambia el msj por ej
   }
 };
 
