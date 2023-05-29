@@ -67,21 +67,28 @@ export const registerUserWithEmailPassword = async ({
   }
 };
 
-
-export const loginWithEmailPassword = async({ email, password }) => {
-
+export const loginWithEmailPassword = async ({ email, password }) => {
   try {
-      const resp = await signInWithEmailAndPassword( FirebaseAuth, email, password );
-      const { uid, photoURL, displayName } = resp.user;
+    const resp = await signInWithEmailAndPassword(
+      FirebaseAuth,
+      email,
+      password
+    );
+    const { uid, photoURL, displayName } = resp.user;
 
-      return {
-          ok: true,
-          uid, photoURL, displayName
-      }
-
+    return {
+      ok: true,
+      uid,
+      photoURL,
+      displayName,
+    };
   } catch (error) {
-      return { ok: false, errorMessage: error.message }
+    return { ok: false, errorMessage: error.message };
   }
-}
+};
+//Creamos esta funcion asincrona para cerrar todo tipo de sesion (Google, Firabase, Twitter, etc.)
+export const logoutFirabase = async () => {
+  return await FirebaseAuth.signOut();
+};
 
-//! Todo este provider luego lo llamamos en nuestro THUNK
+//! Todo este provider luego lo llamamos en nuestro THUNK 

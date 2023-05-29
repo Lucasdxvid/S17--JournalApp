@@ -27,7 +27,8 @@ export const authSlice = createSlice({
       state.email = null;
       state.displayName = null;
       state.photoURL = null;
-      state.errorMessage = payload.errorMessage; // Es el error de autenticacion de nuestro TRY CATCH en el PROVIDER js / thunks
+      // El ? pregunta si viene y fixea el problema
+      state.errorMessage = payload?.errorMessage; // Es el error de autenticacion de nuestro TRY CATCH en el PROVIDER js / thunks
     },
     //? Cuando la APP este en proceso asincrono de autentificacion, la misma estara en estado de "loading" para bloquear botones, etc. Hasta que cargue
     checkingCredentials: (state) => {
