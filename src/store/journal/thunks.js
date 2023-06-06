@@ -1,6 +1,7 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite"; // De aqui tomamos el nodo / ruta  /id:user-1/journal/notas
 import { FirebaseDB } from "../../firebase/config"; // Nuestra base de datos no relacional FIRESTORE
-import { addNewEmptyNote, savingNewNote, setActiveNote } from "./";
+import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes } from "./";
+import { loadNotes } from "../../helpers";
 
 //! Empezamos el proceso de subida de nota a fireStore (GetState para ver todo el estado)
 export const startNewNote = () => {
@@ -25,5 +26,15 @@ export const startNewNote = () => {
     //! Dispatch de la nueva nota generada al usar el boton +
     dispatch(addNewEmptyNote(newNote)); //El payload es la newNote
     dispatch(setActiveNote(newNote));
+  };
+};
+
+//! Cargar notas en fireStore - A esto lo llamamos en nuestro customHook useCheckAuth
+export const startLoadingNotes = () => {
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth; // Desestruramos el UID del getState en la rama de AUTH
+    if (!uid) throw new Error("El UID del usuario no existe");
+   const notes = await loadNotes(uid); // Traemos esto de nuestro HELPER
+    dispatch(setNotes(notes)) // Aqui establecemos las notas ya existentes
   };
 };

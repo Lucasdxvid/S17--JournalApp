@@ -1,21 +1,10 @@
 import { TurnedInNot } from "@mui/icons-material";
-import {
-  Box,
-  Divider,
-  Drawer,
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Toolbar,
-  Typography,
-} from "@mui/material";
+import { Box, Divider, Drawer, List, Toolbar, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
-
+import { SideBarItem } from "./";
 export const SideBar = ({ drawerWidth = 240 }) => {
   const { displayName } = useSelector((state) => state.auth); //* 1er argumento (state - nuestro objeto auth (slice)) / Sirve para seleccionar o tomar alguna pieza del state, leer algo del STORE
+  const { notes } = useSelector((state) => state.journal); //! Mapearemos las notas existentes en nuestro SIDEBAR
 
   return (
     //! Drawer es el SideBar
@@ -39,18 +28,8 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         <Divider />
         {/* Mapeo */}
         <List>
-          {["Enero", "Febrero", "Marzo", "Abril"].map((text) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  <TurnedInNot />
-                </ListItemIcon>
-                <Grid container>
-                  <ListItemText primary={text} />
-                  <ListItemText secondary={"Lorem faijfsoaijfoa aiwjoiajfwo"} />
-                </Grid>
-              </ListItemButton>
-            </ListItem>
+          {notes.map((note) => (
+            <SideBarItem key={note.id} note={note} />
           ))}
         </List>
       </Drawer>

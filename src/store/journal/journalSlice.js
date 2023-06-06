@@ -30,7 +30,9 @@ export const journalSlice = createSlice({
       state.isSaving = true;
     },
     //Establecemos las notas cuando ya la tenemos leidas desde algun lugar ???
-    setNotes: (state, action) => {},
+    setNotes: (state, action) => {
+      state.notes = action.payload
+    },
     //Establecemos algo cuando guardamos las notas (luego de crearla)
     setSaving: (state) => {},
     //Actualizamos una nota ya creada
