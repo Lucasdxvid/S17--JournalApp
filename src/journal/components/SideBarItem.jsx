@@ -9,7 +9,7 @@ import {
 import { useMemo } from "react";
 
 export const SideBarItem = ({ title = "", body, id }) => {
-  //! Esto basicamente añade ... si el titulo es mayor a X cantidad
+  //! Esto basicamente añade ... si el titulo es mayor a 17 digitos cantidad
   const newTitle = useMemo(() => {
     return title.length > 17 ? title.substring(0, 17) + "..." : title;
   }, [title]);
