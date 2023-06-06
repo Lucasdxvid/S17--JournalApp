@@ -6,8 +6,14 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
+import { useMemo } from "react";
 
-export const SideBarItem = ({ note }) => {
+export const SideBarItem = ({ title = "", body, id }) => {
+  //! Esto basicamente añade ... si el titulo es mayor a X cantidad
+  const newTitle = useMemo(() => {
+    return title.length > 17 ? title.substring(0, 17) + "..." : title;
+  }, [title]);
+
   return (
     <ListItem disablePadding>
       <ListItemButton>
@@ -15,8 +21,8 @@ export const SideBarItem = ({ note }) => {
           <TurnedInNot />
         </ListItemIcon>
         <Grid container>
-          <ListItemText primary={note.title} />
-          <ListItemText secondary={"Lorem faijfsoaijfoa aiwjoiajfwo"} />
+          <ListItemText primary={newTitle} />
+          <ListItemText secondary={body} />
         </Grid>
       </ListItemButton>
     </ListItem>

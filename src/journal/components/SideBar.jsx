@@ -29,7 +29,7 @@ export const SideBar = ({ drawerWidth = 240 }) => {
         {/* Mapeo */}
         <List>
           {notes.map((note) => (
-            <SideBarItem key={note.id} note={note} />
+            <SideBarItem key={note.id} {...note} />
           ))}
         </List>
       </Drawer>
