@@ -7,8 +7,16 @@ import {
   ListItemText,
 } from "@mui/material";
 import { useMemo } from "react";
+import { setActiveNote } from "../../store/journal/journalSlice";
+import { useDispatch } from "react-redux";
 
-export const SideBarItem = ({ title = "", body, id }) => {
+export const SideBarItem = ({ title = "", body, id, date, imageUrls = [] }) => {
+  const dispatch = useDispatch();
+
+  const onclickNote = () => {
+    dispatch(setActiveNote({ title, body, id, date, imageUrls })); // Establecemos la nota activa
+  };
+
   //! Esto basicamente añade ... si el titulo es mayor a 17 digitos cantidad
   const newTitle = useMemo(() => {
     return title.length > 17 ? title.substring(0, 17) + "..." : title;
@@ -16,7 +24,7 @@ export const SideBarItem = ({ title = "", body, id }) => {
 
   return (
     <ListItem disablePadding>
-      <ListItemButton>
+      <ListItemButton onClick={onclickNote}>
         <ListItemIcon>
           <TurnedInNot />
         </ListItemIcon>
