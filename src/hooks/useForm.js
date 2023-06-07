@@ -20,6 +20,11 @@ export const useForm = (initialForm = {}, formValidations = {}) => {
     return true;
   }, [formValidation]);
 
+  //! El componente no se esta destruyendo y volviendo a genera, cambia la nota activa pero nunca le decimos a nuestro useForm que si el initialForm cambia que vuelva a colocar los valores del initialForm
+  useEffect(() => {
+    setFormState(initialForm); // Si el formulario inicial cambia volvemos a llamar el useEffect
+  }, [initialForm]); // Cuando la NOTE activa de noteView.jsx cambie, se reconstruye nuestro initialForm
+
   const onInputChange = ({ target }) => {
     const { name, value } = target;
     setFormState({

@@ -18,6 +18,11 @@ import {
   startLoginWithEmailPassword,
 } from "../../store/auth";
 
+const formData = {
+  email: "",
+  password: "",
+};
+
 export const LoginPage = () => {
   const { status, errorMessage } = useSelector((state) => state.auth); //* 1er argumento (state - nuestro objeto auth (slice)) / Sirve para seleccionar o tomar alguna pieza del state, leer algo del STORE
 
@@ -25,10 +30,7 @@ export const LoginPage = () => {
 
   const dispatch = useDispatch(); //? Nos permite traer nuestros thunks
 
-  const { email, password, onInputChange } = useForm({
-    email: "xxx@gmail.com",
-    password: "123456",
-  });
+  const { email, password, onInputChange } = useForm(formData);
 
   const onSubmit = (event) => {
     event.preventDefault();
