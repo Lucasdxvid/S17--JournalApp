@@ -1,6 +1,6 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite"; // De aqui tomamos el nodo / ruta  /id:user-1/journal/notas
 import { FirebaseDB } from "../../firebase/config"; // Nuestra base de datos no relacional FIRESTORE
-import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes } from "./";
+import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving, updateNote } from "./";
 import { loadNotes } from "../../helpers";
 
 //! Empezamos el proceso de subida de nota a fireStore (GetState para ver todo el estado)
@@ -34,7 +34,23 @@ export const startLoadingNotes = () => {
   return async (dispatch, getState) => {
     const { uid } = getState().auth; // Desestruramos el UID del getState en la rama de AUTH
     if (!uid) throw new Error("El UID del usuario no existe");
-   const notes = await loadNotes(uid); // Traemos esto de nuestro HELPER
-    dispatch(setNotes(notes)) // Aqui establecemos las notas ya existentes
+    const notes = await loadNotes(uid); // Traemos esto de nuestro HELPER
+    dispatch(setNotes(notes)); // Aqui establecemos las notas ya existentes
+  };
+};
+//! Guardar cambios escritos en la nota
+export const startSavingNote = () => {
+  return async (dispatch, getState) => {
+    dispatch(setSaving()) // Cuando clickeemos al boton de GUARDAR, la nota sera actualizada por lo que estado isSaving sera TRUE porque esta en proceso de guardado
+    const { uid } = getState().auth;
+    const { active: note } = getState().journal;
+    //? Esto seria la nota que queremos mandar a fireStore(abajo)
+    const noteToFireStore = { ...note };
+    delete noteToFireStore.id; //Eliminamos la propiedad ID del objeto con DELETE (es de JS)
+    //* Ya tenemos lo que queremos guardar arriba, ahora tenemos que hacer referencia al documento para ser Reemplazado en la DB
+    const docRef = doc(FirebaseDB, `${uid}/journal/notas/${note.id}`); // No usamos el noteToFireStore porque ese es el que usamos para eliminar la propiedad
+    await setDoc(docRef, noteToFireStore, { merge: true }); //* La tercera propi merge es para que si por ejemplo tenemos un campo que no esta en la fireStore, los mantega y a su vez ponga los campos nuevos
+  
+    dispatch(updateNote(note)) //Actualizamos la nota modificada
   };
 };

@@ -31,12 +31,24 @@ export const journalSlice = createSlice({
     },
     //Establecemos las notas cuando ya la tenemos leidas desde algun lugar ???
     setNotes: (state, action) => {
-      state.notes = action.payload
+      state.notes = action.payload;
     },
     //Establecemos algo cuando guardamos las notas (luego de crearla)
-    setSaving: (state) => {},
+    setSaving: (state) => {
+      state.isSaving = true;
+    },
     //Actualizamos una nota ya creada
-    updateNote: (state, action) => {},
+    updateNote: (state, action) => {
+      state.isSaving = false; // falso porque ya terminamos de editar la nota
+      state.notes = state.notes.map((note) => {
+        //* Si mi ID (de mi store) es igual al payload.id es porque es la nota que necesita ser actualizada / esta actualizada
+        if (note.id === action.payload.id) {
+          return action.payload; //Ponemos el return para marcar que ese es el valor y detenga la funcion
+        }
+
+        return note;
+      });
+    },
     //Borramos una nota creada
     deleteNodeById: (state, action) => {},
   },
