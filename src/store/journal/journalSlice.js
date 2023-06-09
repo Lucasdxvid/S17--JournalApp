@@ -24,6 +24,7 @@ export const journalSlice = createSlice({
     //Seleccionamos la nota activa al clickearla (La que creamos con el boton +)
     setActiveNote: (state, action) => {
       state.active = action.payload; //! Establecemos la nota seleccionada en el active que era null
+      state.messageSaved = "";
     },
     //Evitamos doble click al boton + colocando isSaving en TRUE para deshabilitar el boton
     savingNewNote: (state) => {
@@ -36,6 +37,7 @@ export const journalSlice = createSlice({
     //Establecemos algo cuando guardamos las notas (luego de crearla)
     setSaving: (state) => {
       state.isSaving = true;
+      state.messageSaved = "";
     },
     //Actualizamos una nota ya creada
     updateNote: (state, action) => {
@@ -48,6 +50,8 @@ export const journalSlice = createSlice({
 
         return note;
       });
+
+      state.messageSaved = `${action.payload.title}, actualizada correctamente`;
     },
     //Borramos una nota creada
     deleteNodeById: (state, action) => {},
