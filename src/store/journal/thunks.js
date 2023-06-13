@@ -1,7 +1,14 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite"; // De aqui tomamos el nodo / ruta  /id:user-1/journal/notas
 import { FirebaseDB } from "../../firebase/config"; // Nuestra base de datos no relacional FIRESTORE
-import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving, updateNote } from "./";
-import { loadNotes } from "../../helpers";
+import {
+  addNewEmptyNote,
+  savingNewNote,
+  setActiveNote,
+  setNotes,
+  setSaving,
+  updateNote,
+} from "./";
+import { fileUpload, loadNotes } from "../../helpers";
 
 //! Empezamos el proceso de subida de nota a fireStore (GetState para ver todo el estado)
 export const startNewNote = () => {
@@ -41,7 +48,7 @@ export const startLoadingNotes = () => {
 //! Guardar cambios escritos en la nota
 export const startSavingNote = () => {
   return async (dispatch, getState) => {
-    dispatch(setSaving()) // Cuando clickeemos al boton de GUARDAR, la nota sera actualizada por lo que estado isSaving sera TRUE porque esta en proceso de guardado
+    dispatch(setSaving()); // Cuando clickeemos al boton de GUARDAR, la nota sera actualizada por lo que estado isSaving sera TRUE porque esta en proceso de guardado
     const { uid } = getState().auth;
     const { active: note } = getState().journal;
     //? Esto seria la nota que queremos mandar a fireStore(abajo)
@@ -50,7 +57,15 @@ export const startSavingNote = () => {
     //* Ya tenemos lo que queremos guardar arriba, ahora tenemos que hacer referencia al documento para ser Reemplazado en la DB
     const docRef = doc(FirebaseDB, `${uid}/journal/notas/${note.id}`); // No usamos el noteToFireStore porque ese es el que usamos para eliminar la propiedad
     await setDoc(docRef, noteToFireStore, { merge: true }); //* La tercera propi merge es para que si por ejemplo tenemos un campo que no esta en la fireStore, los mantega y a su vez ponga los campos nuevos
-  
-    dispatch(updateNote(note)) //Actualizamos la nota modificada
+
+    dispatch(updateNote(note)); //Actualizamos la nota modificada
+  };
+};
+
+export const startUploadingFiles = (files = []) => {
+  return async (dispatch) => {
+    dispatch(setSaving()); //SetSaving bloquea botones
+
+    await fileUpload(files[0]);
   };
 };
